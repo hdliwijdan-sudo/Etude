@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>📚 دراستي - 2 ثانوي علوم تجريبية</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{
+    --bg:#fef9f3;
+    --card:#ffffff;
+    --primary:#ff8c42;
+    --primary-light:#ffd4b3;
+    --secondary:#4ecdc4;
+    --accent:#ffe66d;
+    --pink:#ff6b9d;
+    --purple:#a78bfa;
+    --green:#95e1a3;
+    --text:#2d3436;
+    --text-light:#636e72;
+    --border:#f0e6dc;
+    --shadow:0 4px 20px rgba(255,140,66,0.12);
+    --shadow-hover:0 8px 30px rgba(255,140,66,0.22);
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Tahoma',sans-serif;
+    background:linear-gradient(135deg,#fef9f3 0%,#fff5eb 50%,#f0fbfa 100%);
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom:90px;
+    font-size:15px;
+  }
+  /* ===== Header ===== */
+  header{
+    background:linear-gradient(135deg,var(--primary) 0%,#ff6b9d 100%);
+    color:white;
+    padding:18px 20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 4px 20px rgba(255,140,66,0.3);
+    border-radius:0 0 24px 24px;
+  }
+  header h1{ font-size:18px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  header p{ font-size:12px; opacity:.9; margin-top:3px;}
+  /* ===== Navigation Tabs ===== */
+  nav{
+    position:fixed;
+    bottom:0; left:0; right:0;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    padding:8px 4px 10px;
+    box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+    border-radius:24px 24px 0 0;
+    z-index:100;
+  }
+  nav button{
+    background:none;
+    border:none;
+    color:var(--text-light);
+    font-size:10px;
+    padding:6px 4px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    cursor:pointer;
+    border-radius:14px;
+    transition:all .2s;
+    flex:1;
+    font-family:inherit;
+  }
+  nav button .ico{ font-size:20px; }
+  nav button.active{
+    color:var(--primary);
+    background:#fff5eb;
+    transform:translateY(-2px);
+  }
+  /* ===== Sections ===== */
+  .section{ display:none; padding:16px; animation:fade .3s;}
+  .section.active{ display:block; }
+  @keyframes fade{ from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+  /* ===== Cards ===== */
+  .card{
+    background:var(--card);
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+  }
+  .card h2{
+    font-size:15px;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text);
+  }
+  .card h2 .dot{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--primary);
+  }
+  /* ===== Inputs ===== */
+  input, select, textarea{
+    width:100%;
+    padding:12px 14px;
+    border:2px solid var(--border);
+    border-radius:12px;
+    font-size:14px;
+    font-family:inherit;
+    background:#fefcf9;
+    color:var(--text);
+    transition:all .2s;
+    margin-bottom:10px;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--primary);
+    background:white;
+    box-shadow:0 0 0 4px var(--primary-light);
+  }
+  textarea{ resize:vertical; min-height:70px; }
+  /* ===== Buttons ===== */
+  .btn{
+    background:linear-gradient(135deg,var(--primary),#ff6b9d);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    transition:all .2s;
+    box-shadow:0 4px 12px rgba(255,140,66,0.3);
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn.secondary{
+    background:var(--secondary);
+    box-shadow:0 4px 12px rgba(78,205,196,0.3);
+  }
+  .btn.danger{
+    background:#ff6b6b;
+    box-shadow:0 4px 12px rgba(255,107,107,0.3);
+  }
+  .btn.small{ padding:8px 14px; font-size:12px;}
+  .row{ display:flex; gap:8px; align-items:center;}
+  /* ===== Tasks ===== */
+  .task{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    background:#fefcf9;
+    border-radius:12px;
+    margin-bottom:8px;
+    border:1px solid var(--border);
+    transition:all .2s;
+  }
+  .task.done{ opacity:.55; }
+  .task.done .task-title{ text-decoration:line-through; }
+  .task-check{
+    width:24px; height:24px;
+    border-radius:50%;
+    border:2px solid var(--primary);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    background:white;
+    font-size:14px;
+    transition:all .2s;
+  }
+  .task.done .task-check{
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary);
+  }
+  .task-title{ flex:1; font-size:14px; }
+  .task-del{
+    background:none; border:none;
+    color:#ff6b6b;
+    font-size:18px;
+    cursor:pointer;
+    padding:4px;
+  }
+  /* ===== Subject chips ===== */
+  .subjects{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;}
+  .chip{
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:all .2s;
+    background:#fefcf9;
+    color:var(--text-light);
+    border-color:var(--border);
+  }
+  .chip.active{
+    background:linear-gradient(135deg,var(--primary),#ff6b9d);
+    color:white;
+    border-color:transparent;
+    transform:scale(1.05);
+  }
+  /* ===== Pomodoro ===== */
+  .pomodoro{
+    text-align:center;
+    padding:20px 16px;
+  }
+  .timer-display{
+    font-size:72px;
+    font-weight:700;
+    background:linear-gradient(135deg,var(--primary),#ff6b9d);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin:12px 0;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:2px;
+  }
+  .timer-mode{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:20px;
+    background:var(--primary-light);
+    color:var(--primary);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  /* ===== Stats ===== */
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+  .stat-box{
+    background:linear-gradient(135deg,#fff5eb,#ffe8d6);
+    border-radius:16px;
+    padding:14px;
+    text-align:center;
+    border:1px solid var(--border);
+  }
+  .stat-num{
+    font-size:24px;
+    font-weight:700;
+    color:var(--primary);
+    display:block;
+  }
+  .stat-label{ font-size:11px; color:var(--text-light);}
+  /* ===== Schedule ===== */
+  .day-block{
+    background:#fefcf9;
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:10px;
+    border-right:4px solid var(--secondary);
+  }
+  .day-block h3{
+    font-size:13px;
+    color:var(--secondary);
+    margin-bottom:8px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .lesson-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 10px;
+    background:white;
+    border-radius:10px;
+    margin-bottom:6px;
+    font-size:13px;
+    border:1px solid var(--border);
+  }
+  .lesson-time{
+    font-size:11px;
+    color:var(--primary);
+    font-weight:700;
+    background:var(--primary-light);
+    padding:3px 8px;
+    border-radius:8px;
+  }
+  /* ===== Notes ===== */
+  .note-item{
+    background:#fefcf9;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:8px;
+    border-right:4px solid var(--accent);
+    font-size:13px;
+  }
+  .note-item .note-subject{
+    font-size:11px;
+    font-weight:700;
+    color:var(--primary);
+    margin-bottom:4px;
+  }
+  /* ===== Exams ===== */
+  .exam-item{
+    background:linear-gradient(135deg,#fff5eb,#ffe8d6);
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-right:4px solid var(--pink);
+  }
+  .exam-info h4{ font-size:14px; margin-bottom:3px;}
+  .exam-date{ font-size:11px; color:var(--text-light);}
+  .exam-days{
+    font-size:12px;
+    font-weight:700;
+    color:var(--pink);
+    background:white;
+    padding:6px 10px;
+    border-radius:10px;
+  }
+  /* ===== Empty ===== */
+  .empty{
+    text-align:center;
+    padding:24px 12px;
+    color:var(--text-light);
+    font-size:13px;
+  }
+  .empty .ico{ font-size:36px; display:block; margin-bottom:8px; opacity:.6;}
+  /* ===== Modal ===== */
+  .modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(45,52,54,0.5);
+    z-index:200;
+    align-items:flex-end;
+    justify-content:center;
+    backdrop-filter:blur(4px);
+  }
+  .modal.active{ display:flex; }
+  .modal-content{
+    background:white;
+    border-radius:24px 24px 0 0;
+    padding:20px;
+    width:100%;
+    max-width:500px;
+    max-height:85vh;
+    overflow-y:auto;
+    animation:slideUp .3s;
+  }
+  @keyframes slideUp{ from{transform:translateY(100%);} to{transform:translateY(0);} }
+  .modal-content h3{
+    font-size:16px;
+    margin-bottom:14px;
+    color:var(--primary);
+  }
+  /* ===== Progress bar ===== */
+  .progress-bar{
+    height:10px;
+    background:var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:8px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    border-radius:10px;
+    transition:width .4s;
+  }
+  /* ===== Responsive iPad ===== */
+  @media (min-width:768px){
+    body{ font-size:16px; padding-bottom:100px; }
+    header h1{ font-size:22px; }
+    header p{ font-size:14px; }
+    .section{ padding:24px; max-width:900px; margin:0 auto; }
+    nav{ padding:12px 40px; max-width:900px; margin:0 auto; border-radius:24px 24px 0 0; }
+    nav button{ font-size:12px; }
+    nav button .ico{ font-size:24px; }
+    .card{ padding:20px; }
+    .stats-grid{ grid-template-columns:repeat(4,1fr); }
+    .timer-display{ font-size:96px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 دراستي</h1>
+  <p>السنة الثانية ثانوي — علوم تجريبية</p>
+</header>
+
+<!-- ===================== HOME / TASKS ===================== -->
+<section class="section active" id="home">
+  <div class="card">
+    <h2><span class="dot"></span> المهام اليومية</h2>
+    <div class="row">
+      <input type="text" id="taskInput" placeholder="أضف مهمة جديدة..." onkeypress="if(event.key==='Enter')addTask()">
+      <button class="btn" onclick="addTask()">➕</button>
+    </div>
+    <div id="tasksList"></div>
+    <div class="progress-bar"><div class="progress-fill" id="taskProgress"></div></div>
+    <p style="font-size:11px;color:var(--text-light);margin-top:6px;text-align:center;" id="taskProgressText">0 / 0</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot" style="background:var(--secondary)"></span> تتبع الدروس</h2>
+    <input type="text" id="lessonName" placeholder="اسم الدرس...">
+    <select id="lessonSubject"></select>
+    <select id="lessonStatus">
+      <option value="todo">📖 لم يُدرس بعد</option>
+      <option value="studied">✅ درسته</option>
+      <option value="reviewed">🔄 راجعته</option>
+      <option value="hard">⚠️ غير مفهوم</option>
+    </select>
+    <button class="btn secondary" onclick="addLesson()" style="width:100%">إضافة الدرس</button>
+    <div id="lessonsList" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<!-- ===================== SCHEDULE ===================== -->
+<section class="section" id="schedule">
+  <div class="card">
+    <h2><span class="dot" style="background:var(--secondary)"></span> جدولي الأسبوعي</h2>
+    <input type="text" id="schedLesson" placeholder="اسم الحصة/الدرس...">
+    <div class="row">
+      <select id="schedDay" style="flex:1">
+        <option>الأحد</option>
+        <option>الاثنين</option>
+        <option>الثلاثاء</option>
+        <option>الأربعاء</option>
+        <option>الخميس</option>
+        <option>الجمعة</option>
+        <option>السبت</option>
+      </select>
+      <input type="time" id="schedTime" style="flex:1">
+    </div>
+    <button class="btn secondary" onclick="addSchedule()" style="width:100%">إضافة للحصة</button>
+  </div>
+  <div id="scheduleList"></div>
+</section>
+
+<!-- ===================== POMODORO ===================== -->
+<section class="section" id="pomodoro">
+  <div class="card pomodoro">
+    <h2 style="justify-content:center"><span class="dot" style="background:var(--pink)"></span> مؤقت بومودورو</h2>
+    <div class="timer-mode" id="timerMode">🎯 وقت الدراسة</div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    <div class="row" style="justify-content:center;flex-wrap:wrap">
+      <button class="btn" id="startBtn" onclick="toggleTimer()">▶️ ابدأ</button>
+      <button class="btn secondary" onclick="resetTimer()">🔄 إعادة</button>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+      <button class="btn small secondary" onclick="setMode('study')">📖 دراسة 25د</button>
+      <button class="btn small secondary" onclick="setMode('short')">☕ راحة 5د</button>
+      <button class="btn small secondary" onclick="setMode('long')">🌿 راحة 15د</button>
+    </div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:14px">
+      الجلسات المكتملة اليوم: <span id="pomoCount" style="color:var(--primary);font-weight:700">0</span>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== NOTES ===================== -->
+<section class="section" id="notes">
+  <div class="card">
+    <h2><span class="dot" style="background:var(--accent)"></span> ملاحظاتي</h2>
+    <select id="noteSubject"></select>
+    <textarea id="noteText" placeholder="اكتب ملاحظتك هنا..."></textarea>
+    <button class="btn" onclick="addNote()" style="width:100%">💾 حفظ الملاحظة</button>
+  </div>
+  <div id="notesList"></div>
+</section>
+
+<!-- ===================== EXAMS ===================== -->
+<section class="section" id="exams">
+  <div class="card">
+    <h2><span class="dot" style="background:var(--pink)"></span> تنبيهات الفروض</h2>
+    <input type="text" id="examName" placeholder="اسم الفرض/الاختبار...">
+    <select id="examSubject"></select>
+    <input type="date" id="examDate">
+    <button class="btn danger" onclick="addExam()" style="width:100%">⏰ إضافة التنبيه</button>
+  </div>
+  <div id="examsList"></div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section class="section" id="stats">
+  <div class="card">
+    <h2><span class="dot" style="background:var(--purple)"></span> إحصائياتي</h2>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-num" id="statTasks">0</span>
+        <span class="stat-label">مهام مكتملة</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statLessons">0</span>
+        <span class="stat-label">دروس مدروسة</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statPomo">0</span>
+        <span class="stat-label">جلسات بومودورو</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statExams">0</span>
+        <span class="stat-label">فروض قادمة</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot"></span> تقدمي حسب المادة</h2>
+    <div id="subjectProgress"></div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <button class="btn danger" onclick="clearAll()" style="width:100%">🗑️ مسح كل البيانات</button>
+    <p style="font-size:11px;color:var(--text-light);margin-top:10px">⚠️ هذا الإجراء لا يمكن التراجع عنه</p>
+  </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <button class="active" onclick="switchTab('home',this)"><span class="ico">🏠</span>الرئيسية</button>
+  <button onclick="switchTab('schedule',this)"><span class="ico">📅</span>الجدول</button>
+  <button onclick="switchTab('pomodoro',this)"><span class="ico">⏱️</span>بومودورو</button>
+  <button onclick="switchTab('notes',this)"><span class="ico">📝</span>ملاحظات</button>
+  <button onclick="switchTab('exams',this)"><span class="ico">⏰</span>فروض</button>
+  <button onclick="switchTab('stats',this)"><span class="ico">📊</span>إحصائيات</button>
+</nav>
+
+<script>
+/* ============================================================
+   بيانات التطبيق
+   ============================================================ */
+const SUBJECTS = [
+  "رياضيات","علوم طبيعية","فيزياء",
+  "عربية","فرنسية","إنجليزية",
+  "علوم إسلامية","تاريخ وجغرافيا","فلسفة"
+];
+
+let state = {
+  tasks: [],
+  lessons: [],
+  schedule: [],
+  notes: [],
+  exams: [],
+  pomodoros: [],
+  pomoCountToday: 0
+};
+
+/* ============================================================
+   تحميل / حفظ
+   ============================================================ */
+function save(){
+  try{
+    localStorage.setItem('etude_dz_v1', JSON.stringify(state));
+  }catch(e){ console.warn('حفظ فشل',e); }
+}
+function load(){
+  try{
+    const d = localStorage.getItem('etude_dz_v1');
+    if(d) state = Object.assign(state, JSON.parse(d));
+  }catch(e){}
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+/* ============================================================
+   التنقل
+   ============================================================ */
+function switchTab(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='stats') renderStats();
+}
+
+/* ============================================================
+   المهام
+   ============================================================ */
+function addTask(){
+  const inp = document.getElementById('taskInput');
+  const t = inp.value.trim();
+  if(!t) return;
+  state.tasks.push({id:uid(),title:t,done:false,date:new Date().toDateString()});
+  inp.value='';
+  save(); renderTasks();
+}
+function toggleTask(id){
+  const t = state.tasks.find(x=>x.id===id);
+  if(t){ t.done=!t.done; save(); renderTasks(); }
+}
+function delTask(id){
+  state.tasks = state.tasks.filter(x=>x.id!==id);
+  save(); renderTasks();
+}
+function renderTasks(){
+  const list = document.getElementById('tasksList');
+  const today = new Date().toDateString();
+  const todays = state.tasks.filter(t=>t.date===today);
+  if(!todays.length){
+    list.innerHTML = '<div class="empty"><span class="ico">🌸</span>لا مهام اليوم. أضف مهمتك الأولى!</div>';
+  } else {
+    list.innerHTML = todays.map(t=>`
+      <div class="task ${t.done?'done':''}">
+        <div class="task-check" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div>
+        <div class="task-title">${escapeHtml(t.title)}</div>
+        <button class="task-del" onclick="delTask('${t.id}')">✕</button>
+      </div>
+    `).join('');
+  }
+  const done = todays.filter(t=>t.done).length;
+  const pct = todays.length ? (done/todays.length*100) : 0;
+  document.getElementById('taskProgress').style.width = pct+'%';
+  document.getElementById('taskProgressText').textContent = `${done} / ${todays.length}`;
+}
+
+/* ============================================================
+   الدروس
+   ============================================================ */
+function addLesson(){
+  const name = document.getElementById('lessonName').value.trim();
+  const subject = document.getElementById('lessonSubject').value;
+  const status = document.getElementById('lessonStatus').value;
+  if(!name) return;
+  state.lessons.push({id:uid(),name,subject,status,date:new Date().toDateString()});
+  document.getElementById('lessonName').value='';
+  save(); renderLessons();
+}
+function delLesson(id){
+  state.lessons = state.lessons.filter(x=>x.id!==id);
+  save(); renderLessons();
+}
+function cycleLesson(id){
+  const l = state.lessons.find(x=>x.id===id);
+  if(!l) return;
+  const order = ['todo','studied','reviewed','hard'];
+  const i = order.indexOf(l.status);
+  l.status = order[(i+1)%order.length];
+  save(); renderLessons();
+}
+function renderLesso
